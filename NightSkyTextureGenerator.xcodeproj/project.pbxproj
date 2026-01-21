@@ -6,11 +6,27 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		968FA5632F2191B400758CCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 969232A92F20C4510081E0F1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 969232B02F20C4510081E0F1;
+			remoteInfo = NightSkyTextureGenerator;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		968FA55F2F2191B300758CCE /* NightSkyTextureGeneratorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightSkyTextureGeneratorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		969232B12F20C4510081E0F1 /* NightSkyTextureGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NightSkyTextureGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		968FA5602F2191B300758CCE /* NightSkyTextureGeneratorTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = NightSkyTextureGeneratorTests;
+			sourceTree = "<group>";
+		};
 		969232B32F20C4510081E0F1 /* NightSkyTextureGenerator */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = NightSkyTextureGenerator;
@@ -19,6 +35,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		968FA55C2F2191B300758CCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		969232AE2F20C4510081E0F1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				969232B32F20C4510081E0F1 /* NightSkyTextureGenerator */,
+				968FA5602F2191B300758CCE /* NightSkyTextureGeneratorTests */,
 				969232B22F20C4510081E0F1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				969232B12F20C4510081E0F1 /* NightSkyTextureGenerator.app */,
+				968FA55F2F2191B300758CCE /* NightSkyTextureGeneratorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +73,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		968FA55E2F2191B300758CCE /* NightSkyTextureGeneratorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 968FA5652F2191B400758CCE /* Build configuration list for PBXNativeTarget "NightSkyTextureGeneratorTests" */;
+			buildPhases = (
+				968FA55B2F2191B300758CCE /* Sources */,
+				968FA55C2F2191B300758CCE /* Frameworks */,
+				968FA55D2F2191B300758CCE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				968FA5642F2191B400758CCE /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				968FA5602F2191B300758CCE /* NightSkyTextureGeneratorTests */,
+			);
+			name = NightSkyTextureGeneratorTests;
+			packageProductDependencies = (
+			);
+			productName = NightSkyTextureGeneratorTests;
+			productReference = 968FA55F2F2191B300758CCE /* NightSkyTextureGeneratorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		969232B02F20C4510081E0F1 /* NightSkyTextureGenerator */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 969232BC2F20C4520081E0F1 /* Build configuration list for PBXNativeTarget "NightSkyTextureGenerator" */;
@@ -80,6 +128,10 @@
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
+					968FA55E2F2191B300758CCE = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 969232B02F20C4510081E0F1;
+					};
 					969232B02F20C4510081E0F1 = {
 						CreatedOnToolsVersion = 26.2;
 					};
@@ -100,11 +152,19 @@
 			projectRoot = "";
 			targets = (
 				969232B02F20C4510081E0F1 /* NightSkyTextureGenerator */,
+				968FA55E2F2191B300758CCE /* NightSkyTextureGeneratorTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		968FA55D2F2191B300758CCE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		969232AF2F20C4510081E0F1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +175,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		968FA55B2F2191B300758CCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		969232AD2F20C4510081E0F1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +191,55 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		968FA5642F2191B400758CCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 969232B02F20C4510081E0F1 /* NightSkyTextureGenerator */;
+			targetProxy = 968FA5632F2191B400758CCE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		968FA5662F2191B400758CCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HNS87AD5L9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonneel.NightSkyTextureGeneratorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NightSkyTextureGenerator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NightSkyTextureGenerator";
+			};
+			name = Debug;
+		};
+		968FA5672F2191B400758CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HNS87AD5L9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonneel.NightSkyTextureGeneratorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NightSkyTextureGenerator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NightSkyTextureGenerator";
+			};
+			name = Release;
+		};
 		969232BA2F20C4520081E0F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -312,6 +427,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		968FA5652F2191B400758CCE /* Build configuration list for PBXNativeTarget "NightSkyTextureGeneratorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				968FA5662F2191B400758CCE /* Debug */,
+				968FA5672F2191B400758CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		969232AC2F20C4510081E0F1 /* Build configuration list for PBXProject "NightSkyTextureGenerator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
