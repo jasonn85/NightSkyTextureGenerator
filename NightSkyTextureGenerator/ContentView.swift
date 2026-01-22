@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var starData: StarCatalogue
-    @State var magnitudeCutoff: Double = 6.0
+    @State var magnitudeCutoff: Double = 0.06
     @State var cubeFaceSizePower: Double = 10
     
     var body: some View {
@@ -20,8 +20,8 @@ struct ContentView: View {
             VStack {
                 HStack {
                     Text("Magnitude cutoff: ")
-                    Slider(value: $magnitudeCutoff, in: 0.0...0.10, step: 0.005)
-                    Text(String(format: "%.2f", magnitudeCutoff))
+                    Slider(value: $magnitudeCutoff, in: 0.0...0.10, step: 0.0005)
+                    Text(String(format: "%.4f", magnitudeCutoff))
                 }
                 
                 HStack {
