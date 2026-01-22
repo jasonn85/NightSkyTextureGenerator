@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     var starData: StarCatalogue
-    @State var magnitudeCutoff: Double = 0.06
-    @State var cubeFaceSizePower: Double = 10
+    @State private var magnitudeCutoff: Double = 0.06
+    @State private var cubeFaceSizePower: Double = 10
     
+    private let fileTypeOptions: [UTType] = [.tiff, .png]
+    @State private var exportFileType: UTType = .tiff
+    
+    @State private var isExporting = false
+    @State private var imagesToExport: SkyBoxImageSet? = nil
+        
     var body: some View {
         VStack {
             cubeGrid
@@ -29,6 +36,46 @@ struct ContentView: View {
                     Slider(value: $cubeFaceSizePower, in: 8...15, step: 1.0)
                     Text("\(Int(pow(2.0, cubeFaceSizePower)))")
                 }
+                .padding()
+                                
+                HStack {
+                    Picker("File type", selection: $exportFileType) {
+                        ForEach(fileTypeOptions, id: \.self) {
+                            switch $0 {
+                            case .tiff: Text("TIFF")
+                            case .png: Text("PNG")
+                            default: EmptyView()
+                            }
+                        }
+                    }
+                    
+                    Spacer().frame(width: 30)
+                    
+                    switch exportFileType {
+                    case .tiff:
+                        Button("Export") {
+                            imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                            
+                            isExporting = true
+                        }
+                        .fileExporter(isPresented: $isExporting, documents: imagesToExport?.tiffDocuments ?? [], contentType: .tiff) { result in
+                            isExporting = false
+                        }
+                        
+                    case .png:
+                        Button("Export") {
+                            imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                            
+                            isExporting = true
+                        }
+                        .fileExporter(isPresented: $isExporting, documents: imagesToExport?.pngDocuments ?? [], contentType: .png) { result in
+                            isExporting = false
+                        }
+                        
+                    default:
+                        EmptyView()
+                    }
+                }
             }
             .frame(maxWidth: 400.0)
             .padding()
@@ -43,26 +90,26 @@ struct ContentView: View {
         VStack(spacing: 0.0) {
             HStack(spacing: 0.0) {
                 Rectangle().aspectRatio(1.0, contentMode: .fit).opacity(0.0)
-                imageSet.images[CubeFace(axis: .y, sign: .positive)]!.resizable()
+                Image(decorative: imageSet.images[CubeFace(axis: .y, sign: .positive)]!, scale: 1.0).resizable()
                     .aspectRatio(1.0, contentMode: .fit)
                 Rectangle().aspectRatio(1.0, contentMode: .fit).opacity(0.0)
                 Rectangle().aspectRatio(1.0, contentMode: .fit).opacity(0.0)
             }
             
             HStack(spacing: 0.0) {
-                imageSet.images[CubeFace(axis: .x, sign: .negative)]!.resizable()
+                Image(decorative: imageSet.images[CubeFace(axis: .x, sign: .negative)]!, scale: 1.0).resizable()
                     .aspectRatio(1.0, contentMode: .fit)
-                imageSet.images[CubeFace(axis: .z, sign: .negative)]!.resizable()
+                Image(decorative: imageSet.images[CubeFace(axis: .z, sign: .negative)]!, scale: 1.0).resizable()
                     .aspectRatio(1.0, contentMode: .fit)
-                imageSet.images[CubeFace(axis: .x, sign: .positive)]!.resizable()
+                Image(decorative: imageSet.images[CubeFace(axis: .x, sign: .positive)]!, scale: 1.0).resizable()
                     .aspectRatio(1.0, contentMode: .fit)
-                imageSet.images[CubeFace(axis: .z, sign: .positive)]!.resizable()
+                Image(decorative: imageSet.images[CubeFace(axis: .z, sign: .positive)]!, scale: 1.0).resizable()
                     .aspectRatio(1.0, contentMode: .fit)
             }
             
             HStack(spacing: 0.0) {
                 Rectangle().aspectRatio(1.0, contentMode: .fit).opacity(0.0)
-                imageSet.images[CubeFace(axis: .y, sign: .negative)]!.resizable()
+                Image(decorative:imageSet.images[CubeFace(axis: .y, sign: .negative)]!, scale: 1.0).resizable()
                     .aspectRatio(1.0, contentMode: .fit)
                 Rectangle().aspectRatio(1.0, contentMode: .fit).opacity(0.0)
                 Rectangle().aspectRatio(1.0, contentMode: .fit).opacity(0.0)
