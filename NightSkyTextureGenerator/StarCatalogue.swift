@@ -17,7 +17,7 @@ struct StarCatalogue {
         let rightAscension: Double
         let declination: Double
         let spectralType: SpectralType?
-        let magnitude: Int
+        let magnitude: Double
         let rightAscensionProperMotion: Float?
         let declinationProperMotion: Float?
         let radialVelocity: Double?
@@ -129,7 +129,7 @@ extension StarCatalogue.Star {
         self.rightAscension = Double(fromEightBytes: data.subdata(in: 4..<12))
         self.declination = Double(fromEightBytes: data.subdata(in: 12..<20))
         self.spectralType = SpectralType(fromData: data.subdata(in: 20..<22))
-        self.magnitude = Int(fromTwoBytesLittleEndian: data.subdata(in: 22..<24))
+        self.magnitude = Double(Int(fromTwoBytesLittleEndian: data.subdata(in: 22..<24))) / 100.0
         
         if data.count >= 32 {
             self.rightAscensionProperMotion = Float(fromFourBytes: data.subdata(in: 24..<28))
