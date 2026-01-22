@@ -16,11 +16,39 @@ struct StarCatalogue {
         let catalogueNumber: Float
         let rightAscension: Double
         let declination: Double
-        let spectralType: String?
+        let spectralType: SpectralType?
         let magnitude: Int
         let rightAscensionProperMotion: Float?
         let declinationProperMotion: Float?
         let radialVelocity: Double?
+        
+        struct SpectralType: Equatable {
+            let starClass: StarClass
+            let refinement: Int
+            
+            enum StarClass: Character {
+                case o = "O"
+                case b = "B"
+                case a = "A"
+                case f = "F"
+                case g = "G"
+                case k = "K"
+                case m = "M"
+            }
+        }
+    }
+}
+
+extension StarCatalogue.Star.SpectralType {
+    init?(fromData data: Data) {
+        guard let string = String(data: data, encoding: .ascii),
+              string.count >= 2,
+              let starClass = StarClass(rawValue: string[string.index(string.startIndex, offsetBy: 0)]),
+              let refinement = Int(String(string[string.index(string.startIndex, offsetBy: 1)])) else {
+            return nil
+        }
+        
+        self = StarCatalogue.Star.SpectralType(starClass: starClass, refinement: refinement)
     }
 }
 
@@ -100,7 +128,7 @@ extension StarCatalogue.Star {
         self.catalogueNumber = Float(fromFourBytes: data.subdata(in: 0..<4))
         self.rightAscension = Double(fromEightBytes: data.subdata(in: 4..<12))
         self.declination = Double(fromEightBytes: data.subdata(in: 12..<20))
-        self.spectralType = String(data: data.subdata(in: 20..<22), encoding: .ascii)
+        self.spectralType = SpectralType(fromData: data.subdata(in: 20..<22))
         self.magnitude = Int(fromTwoBytesLittleEndian: data.subdata(in: 22..<24))
         
         if data.count >= 32 {

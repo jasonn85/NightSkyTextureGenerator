@@ -50,7 +50,16 @@ struct NightSkyTextureGeneratorTests {
         #expect(firstStar.magnitude == 670)
         #expect(lastStar.magnitude == 580)
         
-        #expect(firstStar.spectralType == "A1")
-        #expect(lastStar.spectralType == "B8")
+        let expectedFirstStarType = StarCatalogue.Star.SpectralType(
+            starClass: StarCatalogue.Star.SpectralType.StarClass(rawValue: "A")!,
+            refinement: 1)
+        let expectedLastStarType = StarCatalogue.Star.SpectralType(
+            starClass: StarCatalogue.Star.SpectralType.StarClass(rawValue: "B")!,
+            refinement: 8)
+        
+        #expect(firstStar.spectralType == expectedFirstStarType)
+        #expect(lastStar.spectralType == expectedLastStarType)
+        #expect(lastStar.spectralType != expectedFirstStarType)
+        #expect(firstStar.spectralType != expectedLastStarType)
     }
 }
