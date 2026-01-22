@@ -11,18 +11,6 @@ import UniformTypeIdentifiers
 struct SkyBoxImageSet {
     let images: [CubeFace: CGImage]
     
-    var tiffDocuments: [SkyBoxTiffDocument] {
-        CubeFace.allCases.map {
-            SkyBoxTiffDocument(image: images[$0]!, cubeFace: $0)
-        }
-    }
-    
-    var pngDocuments: [SkyBoxPngDocument] {
-        CubeFace.allCases.map {
-            SkyBoxPngDocument(image: images[$0]!, cubeFace: $0)
-        }
-    }
-    
     init(
         withStarCatalogue starCatalogue: StarCatalogue,
         cubeFaceSize: Int,
@@ -93,44 +81,6 @@ extension CGContext {
     }
 }
 
-struct TextureCoordinate {
-    let face: CubeFace
-    let u: Double
-    let v: Double
-}
-
-struct CubeFace: Hashable, CaseIterable {
-    let axis: Axis
-    let sign: Sign
-    
-    static var allCases: [CubeFace] {
-        Sign.allCases.flatMap { sign in
-            Axis.allCases.map { axis in
-                CubeFace(axis: axis, sign: sign)
-            }
-        }
-    }
-}
-
-enum Axis: CaseIterable {
-    case x
-    case y
-    case z
-}
-
-enum Sign: CaseIterable {
-    case positive
-    case negative
-    
-    init(of x: Double) {
-        if x >= 0.0 {
-            self = .positive
-        } else {
-            self = .negative
-        }
-    }
-}
-
 extension StarCatalogue.Star {
     var direction: SIMD3<Double> {
         SIMD3(cos(declination) * cos(rightAscension), sin(declination), cos(declination) * sin(rightAscension))
@@ -143,41 +93,6 @@ extension StarCatalogue.Star {
         }
         
         return pow(10.0, -0.4 * magnitude)
-    }
-}
-
-extension SIMD3<Double> {
-    var textureCoordinate: TextureCoordinate {
-        let x = self.x
-        let y = self.y
-        let z = self.z
-        let ax = abs(x)
-        let ay = abs(y)
-        let az = abs(z)
-        
-        let face: CubeFace
-        let sc: Double
-        let tc: Double
-        let ma: Double
-        
-        if ax >= ay && ax >= az {
-            face = CubeFace(axis: .x, sign: Sign(of: x))
-            ma = ax
-            sc = x > 0.0 ? -z : z
-            tc = y
-        } else if ay >= ax && ay >= az {
-            face = CubeFace(axis: .y, sign: Sign(of: y))
-            ma = ay
-            sc = x
-            tc = y > 0.0 ? -z : z
-        } else {
-            face = CubeFace(axis: .z, sign: Sign(of: z))
-            ma = az
-            sc = z > 0.0 ? x : -x
-            tc = y
-        }
-
-        return TextureCoordinate(face: face, u: 0.5 * (sc / ma + 1.0), v: 0.5 * (tc / ma + 1.0))
     }
 }
 
@@ -256,105 +171,5 @@ extension StarCatalogue.Star.SpectralType.StarClass {
         case .k, .m:
             return .m
         }
-    }
-}
-
-struct SkyBoxTiffDocument: FileDocument {
-    static var readableContentTypes: [UTType] { [ .tiff ] }
-    
-    var image: CGImage
-    var cubeFace: CubeFace
-    
-    init(image: CGImage, cubeFace: CubeFace) {
-        self.image = image
-        self.cubeFace = cubeFace
-    }
-    
-    init(configuration: ReadConfiguration) throws {
-        throw CocoaError(.featureUnsupported)
-    }
-    
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = NSMutableData()
-        
-        guard let destination = CGImageDestinationCreateWithData(
-            data,
-            UTType.tiff.identifier as CFString,
-            1,
-            nil
-        ) else {
-            throw CocoaError(.fileWriteUnknown)
-        }
-        
-        let properties = [
-            kCGImagePropertyTIFFCompression: NSNumber(value: 5)
-        ] as CFDictionary
-        
-        
-        CGImageDestinationAddImage(destination, image, properties)
-        
-        guard CGImageDestinationFinalize(destination) else {
-            throw CocoaError(.fileWriteUnknown)
-        }
-
-        let fileWrapper = FileWrapper(regularFileWithContents: data as Data)
-        fileWrapper.preferredFilename = "skybox-\(cubeFace.fileSuffix)"
-        
-        return fileWrapper
-    }
-}
-
-struct SkyBoxPngDocument: FileDocument {
-    static var readableContentTypes: [UTType] { [ .png ] }
-    
-    var image: CGImage
-    var cubeFace: CubeFace
-    
-    init(image: CGImage, cubeFace: CubeFace) {
-        self.image = image
-        self.cubeFace = cubeFace
-    }
-    
-    init(configuration: ReadConfiguration) throws {
-        throw CocoaError(.featureUnsupported)
-    }
-    
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = NSMutableData()
-        
-        guard let destination = CGImageDestinationCreateWithData(
-            data,
-            UTType.png.identifier as CFString,
-            1,
-            nil
-        ) else {
-            throw CocoaError(.fileWriteUnknown)
-        }
-        
-        CGImageDestinationAddImage(destination, image, nil)
-        
-        guard CGImageDestinationFinalize(destination) else {
-            throw CocoaError(.fileWriteUnknown)
-        }
-
-        let fileWrapper = FileWrapper(regularFileWithContents: data as Data)
-        fileWrapper.preferredFilename = "skybox-\(cubeFace.fileSuffix)"
-        
-        return fileWrapper
-    }
-}
-
-extension CubeFace {
-    var fileSuffix: String {
-        let sign = sign == .positive ? "pos" : "neg"
-        let axis: String
-        
-        switch self.axis {
-        case .x: axis = "X"
-        case .y: axis = "Y"
-        case .z: axis = "Z"
-        }
-        
-        return sign + axis
     }
 }
