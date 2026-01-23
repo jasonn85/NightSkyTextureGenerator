@@ -15,9 +15,15 @@ struct ContentView: View {
     
     private let fileTypeOptions: [UTType] = [.tiff, .png]
     @State private var exportFileType: UTType = .tiff
+    @State private var layout: CubeFormat = .flattenedXYZPlusMinus
     
     @State private var isExporting = false
     @State private var imagesToExport: SkyBoxImageSet? = nil
+    
+    enum CubeFormat: CaseIterable {
+        case sixImages
+        case flattenedXYZPlusMinus
+    }
         
     var body: some View {
         VStack {
@@ -39,42 +45,87 @@ struct ContentView: View {
                 .padding()
                                 
                 HStack {
-                    Picker("File type", selection: $exportFileType) {
-                        ForEach(fileTypeOptions, id: \.self) {
-                            switch $0 {
-                            case .tiff: Text("TIFF")
-                            case .png: Text("PNG")
-                            default: EmptyView()
+                    VStack {
+                        Picker("Format", selection: $layout) {
+                            ForEach(CubeFormat.allCases, id: \.self) {
+                                switch $0 {
+                                case .flattenedXYZPlusMinus: Text("Flattened horizontal")
+                                case .sixImages:
+                                    Text("Separate images")
+                                }
+                            }
+                        }
+                        
+                        Picker("File type", selection: $exportFileType) {
+                            ForEach(fileTypeOptions, id: \.self) {
+                                switch $0 {
+                                case .tiff: Text("TIFF")
+                                case .png: Text("PNG")
+                                default: EmptyView()
+                                }
                             }
                         }
                     }
                     
                     Spacer().frame(width: 30)
                     
-                    switch exportFileType {
-                    case .tiff:
-                        Button("Export") {
-                            imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                    switch layout {
+                    case .sixImages:
+                        switch exportFileType {
+                        case .tiff:
+                            Button("Export") {
+                                imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                                
+                                isExporting = true
+                            }
+                            .fileExporter(isPresented: $isExporting, documents: imagesToExport?.tiffDocuments ?? [], contentType: .tiff) { result in
+                                isExporting = false
+                            }
                             
-                            isExporting = true
-                        }
-                        .fileExporter(isPresented: $isExporting, documents: imagesToExport?.tiffDocuments ?? [], contentType: .tiff) { result in
-                            isExporting = false
+                        case .png:
+                            Button("Export") {
+                                imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                                
+                                isExporting = true
+                            }
+                            .fileExporter(isPresented: $isExporting, documents: imagesToExport?.pngDocuments ?? [], contentType: .png) { result in
+                                isExporting = false
+                            }
+                            
+                        default:
+                            EmptyView()
                         }
                         
-                    case .png:
-                        Button("Export") {
-                            imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                    case .flattenedXYZPlusMinus:
+                        switch exportFileType {
+                        case .tiff:
+                            Button("Export") {
+                                imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                                
+                                isExporting = true
+                            }
+                            .fileExporter(isPresented: $isExporting, document: imagesToExport?.flatTiffDocument, contentType: .tiff) { result in
+                                isExporting = false
+                            }
                             
-                            isExporting = true
-                        }
-                        .fileExporter(isPresented: $isExporting, documents: imagesToExport?.pngDocuments ?? [], contentType: .png) { result in
-                            isExporting = false
+                        case .png:
+                            Button("Export") {
+                                imagesToExport = SkyBoxImageSet(withStarCatalogue: starData, cubeFaceSize: Int(pow(2.0, cubeFaceSizePower)), magnitudeCutoff: magnitudeCutoff)
+                                
+                                isExporting = true
+                            }
+                            .fileExporter(isPresented: $isExporting, document: imagesToExport?.flatPngDocument, contentType: .png) { result in
+                                isExporting = false
+                            }
+                            
+                        default:
+                            EmptyView()
                         }
                         
-                    default:
-                        EmptyView()
+                        
                     }
+                    
+                    
                 }
             }
             .frame(maxWidth: 400.0)
